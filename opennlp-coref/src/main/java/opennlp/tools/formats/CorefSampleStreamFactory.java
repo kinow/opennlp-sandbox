@@ -17,7 +17,7 @@
 
 package opennlp.tools.formats;
 
-import java.io.FileInputStream;
+import java.io.IOException;
 
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
@@ -25,6 +25,8 @@ import opennlp.tools.cmdline.StreamFactoryRegistry;
 import opennlp.tools.cmdline.params.BasicFormatParams;
 import opennlp.tools.coref.CorefSample;
 import opennlp.tools.coref.CorefSampleDataStream;
+import opennlp.tools.util.InputStreamFactory;
+import opennlp.tools.util.MarkableFileInputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.ParagraphStream;
 import opennlp.tools.util.PlainTextByLineStream;
@@ -47,11 +49,17 @@ public class CorefSampleStreamFactory extends AbstractSampleStreamFactory<CorefS
     Parameters params = ArgumentParser.parse(args, Parameters.class);
 
     CmdLineUtil.checkInputFile("Data", params.getData());
-    FileInputStream sampleDataIn = CmdLineUtil.openInFile(params.getData());
 
-    ObjectStream<String> lineStream = new ParagraphStream(new PlainTextByLineStream(sampleDataIn
-        .getChannel(), params.getEncoding()));
+    try {
+      InputStreamFactory sampleDataIn = new MarkableFileInputStreamFactory(params.getData());
+      ObjectStream<String> lineStream = new ParagraphStream(new PlainTextByLineStream(
+              sampleDataIn, params.getEncoding()));
 
-    return new CorefSampleDataStream(lineStream);
+      return new CorefSampleDataStream(lineStream);
+    } catch (IOException e) {
+      // That will throw an exception
+      CmdLineUtil.handleCreateObjectStreamError(e);
+    }
+    return null;
   }
 }
