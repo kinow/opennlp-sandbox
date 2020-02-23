@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>13</version>
+		<version>18</version>
 		<relativePath />
 	</parent>
 
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>org.apache.opennlp</groupId>
 			<artifactId>opennlp-tools</artifactId>
-			<version>1.6.0</version>
+			<version>1.9.2</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -51,20 +51,7 @@
 	</dependencies>
 
 	<build>
-		<resources>
-		    <resource>
-		      <directory>src/main/resources</directory>
-		      <filtering>true</filtering>
-		    </resource>
-		</resources>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>-Xmx512m</argLine>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
